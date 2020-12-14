@@ -293,3 +293,224 @@ h3:after{
         transform: translate(-22px,5px) skew(21deg);
     }
 }
+.slika1, .slika3, .slika4 {
+    position:relative;
+    width: 215px;
+    height: 170px;
+    display: inline-block;
+}
+.first1, .first3, .first4 {
+    display: block;
+    width:215px;
+    height:170px;
+}
+.overlay1, .overlay3, .overlay4 {
+    position: absolute;
+    transition: all .3s ease;
+    opacity: 0;
+    background-color: #eee;
+}
+.slika1:hover .overlay1Cross, .slika3:hover .overlay3Cross, .slika4:hover .overlay4Cross {
+    opacity:1;
+}
+.text1, .text3, .text4 {
+    font-family:  "Harlow Solid Italic";
+    font-size: 22px;
+    color: darkblue;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.overlay1Cross, .overlay3Cross, .overlay4Cross {
+    width:0;
+    height: 0;
+    top: 0;
+    left: 0;
+    background-color: cadetblue;
+}
+.slika1:hover .overlay1Cross, .slika3:hover .overlay3Cross, .slika4:hover .overlay4Cross {
+    width: 100%;
+    height: 100%;
+}
+
+
+
+
+
+.slika5, .slika2, .slika6 {
+    position:relative;
+    width: 215px;
+    height: 170px;
+    display: inline-block;
+}
+.second5, .second2, .second6 {
+    display: block;
+    width:215px;
+    height:170px;
+}
+.overlay5, .overlay2, .overlay6 {
+    position: absolute;
+    transition: all .3s ease;
+    opacity: 0;
+    background-color: #eee;
+}
+.slika5:hover .overlay5Cross, .slika2:hover .overlay2Cross, .slika6:hover .overlay6Cross {
+    opacity:1;
+}
+.text5, .text2, .text6 {
+    font-family:  "Harlow Solid Italic";
+    font-size: 22px;
+    color: darkblue;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.overlay5Cross, .overlay2Cross, .overlay6Cross {
+    width:0;
+    height: 0;
+    top: 0;
+    left: 0;
+    background-color: cadetblue;
+}
+.slika5:hover .overlay5Cross, .slika2:hover .overlay2Cross, .slika6:hover .overlay6Cross {
+    width: 100%;
+    height: 100%;
+}
+
+
+
+
+.slika7, .slika8, .slika9 {
+    position:relative;
+    width: 215px;
+    height: 170px;
+    display: inline-block;
+}
+.third7, .third8, .third9 {
+    display: block;
+    width:215px;
+    height:170px;
+}
+.overlay7, .overlay8, .overlay9 {
+    position: absolute;
+    transition: all .3s ease;
+    opacity: 0;
+    background-color: #eee;
+}
+.slika7:hover .overlay7Cross, .slika8:hover .overlay8Cross, .slika9:hover .overlay9Cross {
+    opacity:1;
+}
+.text7, .text8, .text9 {
+    font-family:  "Harlow Solid Italic";
+    font-size: 22px;
+    color: darkblue;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.overlay7Cross, .overlay8Cross, .overlay9Cross {
+    width:0;
+    height: 0;
+    top: 0;
+    left: 0;
+    background-color: cadetblue;
+}
+.slika7:hover .overlay7Cross, .slika8:hover .overlay8Cross, .slika9:hover .overlay9Cross {
+    width: 100%;
+    height: 100%;
+}
+
+
+
+
+.slika10, .slika11, .slika12 {
+    position:relative;
+    width: 215px;
+    height: 170px;
+    display: inline-block;
+}
+.fourth10, .fourth11, .fourth12 {
+    display: block;
+    width:215px;
+    height:170px;
+}
+.overlay10, .overlay11, .overlay12 {
+    position: absolute;
+    transition: all .3s ease;
+    opacity: 0;
+    background-color: #eee;
+}
+.slika10:hover .overlay10Cross, .slika11:hover .overlay11Cross, .slika12:hover .overlay12Cross {
+    opacity:1;
+}
+.text10, .text11, .text12 {
+    font-family:  "Harlow Solid Italic";
+    font-size: 22px;
+    color: darkblue;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.overlay10Cross, .overlay11Cross, .overlay12Cross {
+    width:0;
+    height: 0;
+    top: 0;
+    left: 0;
+    background-color: cadetblue;
+}
+.slika10:hover .overlay10Cross, .slika11:hover .overlay11Cross, .slika12:hover .overlay12Cross {
+    width: 100%;
+    height: 100%;
+}
+
+
+.slika13, .slika14, .slika15 {
+    position:relative;
+    width: 215px;
+    height: 170px;
+    display: inline-block;
+}
+.fifth13, .fifth14, .fifth15 {
+    display: block;
+    width:215px;
+    height:170px;
+}
+.overlay13, .overlay14, .overlay15 {
+    position: absolute;
+    transition: all .3s ease;
+    opacity: 0;
+    background-color: #eee;
+}
+.slika13:hover .overlay13Cross, .slika14:hover .overlay14Cross, .slika15:hover .overlay15Cross {
+    opacity:1;
+}
+.text13, .text14, .text15 {
+    font-family:  "Harlow Solid Italic";
+    font-size: 22px;
+    color: darkblue;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.overlay13Cross, .overlay14Cross, .overlay15Cross {
+    width:0;
+    height: 0;
+    top: 0;
+    left: 0;
+    background-color: cadetblue;
+}
+.slika13:hover .overlay13Cross, .slika14:hover .overlay14Cross, .slika15:hover .overlay15Cross {
+    width: 100%;
+    height: 100%;
+}
