@@ -1,0 +1,122 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <title>PuppyCare</title>
+
+    <link rel="stylesheet" href="bootstrap.css">
+
+    <link rel="stylesheet" href="Pregled%20na%20veterinarni.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin=""/>
+
+</head>
+<body>
+<header>
+    <div class="containerr">
+        <img src="PuppyCare.png" alt="logo" class="logo">
+        <nav>
+            <ul>
+                <li><a href="PuppyCare.html">Почетна</a></li>
+                <li><a href="Posvojuvanje%20milenici.html">Миленици за посвојување</a></li>
+                <li><a href="Pregled%20na%20veterinarni.html">Преглед на ветеринарни</a></li>
+                <li><a href="Najava.html">Најава</a></li>
+
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<div id="map" style="height: 87%"></div>
+
+<div id="mapModal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Vet details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                [vet data]
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="jquery-3.2.1.min.js"></script>
+<script src="bootstrap.js"></script>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+
+<script>
+    let divMap = document.getElementById("map");
+
+    let data = [{
+        lat: 42.0031667,
+        lon: 21.4594178
+    }, {
+        lat: 42.0069568,
+        lon: 21.3494739
+    }, {
+        lat: 41.7510389,
+        lon: 22.1979565
+    }, {
+        lat: 42.003961,
+        lon: 21.4587514
+    }, {
+        lat: 41.8701511,
+        lon: 21.9412343
+    }, {
+        lat: 41.8700733,
+        lon: 21.9411939
+    }, {
+        lat: 41.9687227,
+        lon: 22.7659249
+    }];
+
+    let markers = [];
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(position => {
+                let mymap = L.map('map').setView([position.coords.latitude, position.coords.longitude], 9);
+
+                L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                    maxZoom: 50,
+                    id: 'mapbox/streets-v11',
+                    tileSize: 512,
+                    zoomOffset: -1,
+                    accessToken: 'pk.eyJ1IjoibWl0a28tMCIsImEiOiJja2k2a2JjM3YwdXloMnVtaHBqNXN1YTJkIn0.Q5JFATs92mguBusbO1zIOw'
+                }).addTo(mymap);
+
+                for (let vet of data) {
+                    let m = L.marker([vet.lat, vet.lon]).addTo(mymap);
+                    m.on('click', () => {
+                        $('#mapModal').modal('show')
+
+                    })
+
+                    markers.push(m);
+                }
+
+            });
+        } else {
+            divMap.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+
+    getLocation();
+
+</script>
+</body>
+</html>
