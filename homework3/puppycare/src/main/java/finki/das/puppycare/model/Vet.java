@@ -4,16 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "vets")
+@Table(name = "vets")
+@Entity
 public class Vet {
     @Id
     private Long id;
@@ -26,4 +24,7 @@ public class Vet {
 
     @OneToMany(mappedBy="vet")
     List<PetReport> reports;
+
+    @OneToMany(mappedBy="vet")
+    List<Pet> pets;
 }

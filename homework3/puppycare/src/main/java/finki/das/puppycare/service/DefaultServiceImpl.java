@@ -1,8 +1,11 @@
 package finki.das.puppycare.service;
 
+import finki.das.puppycare.Constants;
+import finki.das.puppycare.model.Pet;
 import finki.das.puppycare.model.PetReport;
 import finki.das.puppycare.model.PetType;
 import finki.das.puppycare.model.Vet;
+import finki.das.puppycare.repository.PetRepo;
 import finki.das.puppycare.repository.ReportRepo;
 import finki.das.puppycare.repository.VetRepo;
 import finki.das.puppycare.service.interfaces.DefaultService;
@@ -10,25 +13,37 @@ import org.joda.time.DateTimeZone;
 import org.springframework.stereotype.Service;
 
 import org.joda.time.DateTime;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
-
+@SuppressWarnings({"ConstantConditions", "ResultOfMethodCallIgnored"})
 @Service
 public class DefaultServiceImpl implements DefaultService {
     private final ReportRepo reportRepo;
     private final VetRepo vetRepo;
+    private final PetRepo petRepo;
 
-    public DefaultServiceImpl(ReportRepo reportRepo, VetRepo vetRepo) {
+
+
+    public DefaultServiceImpl(ReportRepo reportRepo, VetRepo vetRepo, PetRepo petRepo) {
         this.reportRepo = reportRepo;
         this.vetRepo = vetRepo;
+        this.petRepo = petRepo;
     }
 
     @Override
-    public PetReport processReport(double lat, double lon, boolean customerServes, PetType type, Long vetId) {
+    public PetReport processReport(String message, double lat, double lon, boolean customerServes, PetType type, Long vetId) {
         DateTime now = new DateTime(DateTimeZone.UTC);
 
-        PetReport petReport = new PetReport(null, now.toDate(), lat, lon, false, customerServes, type, null);
+        PetReport petReport = new PetReport(null, message, now.toDate(), lat, lon, false, customerServes, type, null);
 
         Vet vet;
         if (vetId == null) {
@@ -52,10 +67,48 @@ public class DefaultServiceImpl implements DefaultService {
     }
 
     @Override
+    public List<Pet> allPets() {
+        return petRepo.findAll();
+    }
+
+    @Override
+    public Pet savePet(String name, PetType type, Long vetId, List<MultipartFile> images) {
+        Vet vet = vetRepo.findById(vetId).orElseThrow(() -> new RuntimeException("Invalid vet id"));
+
+        Pet pet = new Pet();
+        pet.setVet(vet);
+        pet.setName(name);
+        pet.setType(type);
+        pet.setImagesLocation("/" + name);
+
+        try {
+            for (MultipartFile image : images) {
+                if (image.getContentType().startsWith("image/"))
+                    saveFile(image, name);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return petRepo.save(pet);
+    }
+
+    @Override
     public List<PetReport> viewReports(Long vetId) {
         Vet vet = new Vet();
         vet.setId(vetId);
 
         return reportRepo.findByVet(vet);
+    }
+
+    private void saveFile(MultipartFile file, String location) throws IOException {
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+
+
+        Path path = Paths.get(Constants.fileBasePath, location, fileName);
+        File tmpFile = new File(path.toString());
+        tmpFile.mkdirs();
+        tmpFile.createNewFile();
+        Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
     }
 }

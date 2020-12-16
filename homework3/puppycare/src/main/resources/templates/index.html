@@ -10,7 +10,7 @@
 
 <form method="post" action="/prijavi" id="form">
     <select name="type">
-        <option th:each="option: ${options}" th:value="${option}" th:text="${option}"></option>
+        <option th:each="option: ${types}" th:value="${option}" th:text="${option}"></option>
     </select>
 
     <input type="hidden" id="lat" name="lat" value="">

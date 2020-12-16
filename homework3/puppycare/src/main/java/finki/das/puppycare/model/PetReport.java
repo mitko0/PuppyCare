@@ -10,12 +10,15 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "pet_reports")
+@Table(name = "pet_reports")
+@Entity
 public class PetReport {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
+
+    String message;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;

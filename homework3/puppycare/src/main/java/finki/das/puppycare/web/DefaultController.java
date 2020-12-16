@@ -1,5 +1,6 @@
 package finki.das.puppycare.web;
 
+import finki.das.puppycare.model.Pet;
 import finki.das.puppycare.model.PetReport;
 import finki.das.puppycare.model.PetType;
 import finki.das.puppycare.model.Vet;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -24,15 +26,23 @@ public class DefaultController {
         this.defaultService = defaultService;
     }
 
+    @GetMapping("/")
+    public String index(Model model) {
+        model.addAttribute("types", PetType.values());
+
+        return "index";
+    }
+
     @PostMapping(value = "/prijavi")
-    public RedirectView reportPet(@RequestParam double lat,
+    public RedirectView reportPet(@RequestParam String message,
+                                  @RequestParam double lat,
                                   @RequestParam double lon,
                                   @RequestParam(required = false, defaultValue = "false") boolean customerServes,
                                   @RequestParam(required = false) PetType type,
                                   @RequestParam(required = false) Long vetId,
-                                   RedirectAttributes attr) {
+                                  RedirectAttributes attr) {
 
-        defaultService.processReport(lat, lon, customerServes, type, vetId);
+        defaultService.processReport(message, lat, lon, customerServes, type, vetId);
 
         RedirectView view = new RedirectView("/", true);
         attr.addFlashAttribute("message", true);
@@ -49,7 +59,7 @@ public class DefaultController {
         List<Vet> nearVets = defaultService.nearVets(lat, lon, count);
 
         model.addAttribute("nearVets", nearVets);
-        return "near";
+        return "index";
     }
 
     @GetMapping("/vet")
@@ -58,7 +68,7 @@ public class DefaultController {
         List<Vet> vets = defaultService.allVets();
 
         model.addAttribute("vets", vets);
-        return "all";
+        return "index";
     }
 
     @GetMapping("/vet/{vetId}/pregled")
@@ -67,6 +77,28 @@ public class DefaultController {
         List<PetReport> reports = defaultService.viewReports(vetId);
 
         model.addAttribute("reports", reports);
-        return "asd";
+        return "index";
     }
+
+    @PostMapping("/milenici/novo")
+    public String savePet(@RequestParam String name,
+                          @RequestParam PetType type,
+                          @RequestParam Long vetId,
+                          @RequestParam List<MultipartFile> images) {
+
+        defaultService.savePet(name, type, vetId, images);
+
+        return "redirect:/test";
+    }
+
+    @GetMapping("/milenici")
+    public String viewPets(Model model) {
+
+        List<Pet> pets = defaultService.allPets();
+        model.addAttribute("pets", pets);
+
+        return "test/pets";
+    }
+
+
 }
