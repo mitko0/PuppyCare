@@ -1,21 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
 
-<form method="post" action="/milenici/novo" enctype="multipart/form-data">
-    <label for="name">Name</label>
-    <input type="text" name="name" id="name"> <br>
+<form method="post" action="/sec/new" enctype="multipart/form-data">
 
-    <input type="file" multiple name="images">
+    <label for="username">Username</label>
+    <input type="text" name="username" id="username"> <br>
 
-    <input type="hidden" name="vetId" value="551237601">
-    <input type="hidden" name="type" value="Other">
+    <label for="password">Password</label>
+    <input type="text" name="password" id="password"> <br>
+
+    <select name="role">
+        <option th:each="role: ${roles}" th:text="${role.name()}" th:value="${role.name()}"></option>
+    </select>
 
     <input type="submit">
+
 </form>
 </body>
 </html>
