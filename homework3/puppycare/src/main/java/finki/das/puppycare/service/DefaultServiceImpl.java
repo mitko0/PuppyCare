@@ -2,12 +2,10 @@ package finki.das.puppycare.service;
 
 import finki.das.puppycare.Constants;
 import finki.das.puppycare.model.*;
-import finki.das.puppycare.repository.PetRepo;
-import finki.das.puppycare.repository.ReportRepo;
-import finki.das.puppycare.repository.UserRepo;
-import finki.das.puppycare.repository.VetRepo;
+import finki.das.puppycare.repository.*;
 import finki.das.puppycare.service.interfaces.DefaultService;
 import org.joda.time.DateTimeZone;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,25 +24,36 @@ import java.util.List;
 @SuppressWarnings({"ConstantConditions", "ResultOfMethodCallIgnored"})
 @Service
 public class DefaultServiceImpl implements DefaultService {
+
+    private final BCryptPasswordEncoder passwordEncoder;
     private final ReportRepo reportRepo;
     private final VetRepo vetRepo;
     private final PetRepo petRepo;
     private final UserRepo userRepo;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final RatingRepo ratingRepo;
+    private final PetTermRepo petTermRepo;
 
-    public DefaultServiceImpl(ReportRepo reportRepo, VetRepo vetRepo, PetRepo petRepo, UserRepo userRepo, BCryptPasswordEncoder passwordEncoder) {
+    public DefaultServiceImpl(ReportRepo reportRepo, VetRepo vetRepo, PetRepo petRepo, UserRepo userRepo, BCryptPasswordEncoder passwordEncoder, RatingRepo ratingRepo, PetTermRepo petTermRepo) {
         this.reportRepo = reportRepo;
         this.vetRepo = vetRepo;
         this.petRepo = petRepo;
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
+        this.ratingRepo = ratingRepo;
+        this.petTermRepo = petTermRepo;
     }
 
     @Override
     public PetReport processReport(String message, double lat, double lon, boolean customerServes, PetType type, Long vetId) {
         DateTime now = new DateTime(DateTimeZone.UTC);
 
-        PetReport petReport = new PetReport(null, message, now.toDate(), lat, lon, false, customerServes, type, null);
+        PetReport petReport = new PetReport();
+        petReport.setMessage(message);
+        petReport.setDate(now.toDate());
+        petReport.setLat(lat);
+        petReport.setLon(lon);
+        petReport.setCustomerServes(customerServes);
+        petReport.setType(type);
 
         Vet vet;
         if (vetId == null) {
@@ -95,6 +104,11 @@ public class DefaultServiceImpl implements DefaultService {
     }
 
     @Override
+    public List<PetReport> allReports() {
+        return reportRepo.findAll();
+    }
+
+    @Override
     public List<PetReport> viewReports(Long vetId) {
         Vet vet = new Vet();
         vet.setId(vetId);
@@ -108,6 +122,21 @@ public class DefaultServiceImpl implements DefaultService {
         user.setPassword(passwordEncoder.encode(password));
 
         return userRepo.save(user);
+    }
+
+    @Override
+    public Rating saveRating(Rating rating) {
+        return ratingRepo.save(rating);
+    }
+
+    @Override
+    public List<Rating> rating(Pageable pageable) {
+        return ratingRepo.findOrderedByValue(pageable);
+    }
+
+    @Override
+    public PetTerm createTerm(PetTerm term) {
+        return petTermRepo.save(term);
     }
 
     private void saveFile(MultipartFile file, String location) throws IOException {

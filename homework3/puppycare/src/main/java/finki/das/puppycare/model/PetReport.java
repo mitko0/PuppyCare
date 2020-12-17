@@ -5,7 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,9 +21,14 @@ public class PetReport {
     @Id
     private Long id;
 
+    @NotEmpty
+    String title;
+
+    @Column(name = "message_")
     String message;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "date_")
     private Date date;
 
     private double lat;
@@ -33,9 +41,13 @@ public class PetReport {
     private boolean customerServes = false;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "type_")
     private PetType type;
 
     @ManyToOne
     @JoinColumn(name = "vet_id")
     private Vet vet;
+
+    @OneToMany(mappedBy = "report")
+    private List<Rating> ratings = new ArrayList<>();
 }

@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -21,10 +23,18 @@ public class User {
     @Size(min = 5, message = "Лозинката не смее да е пократка од 5 знака!")
     private String password;
 
-    //@OneToMany(mappedBy = "user")
-    //private List<Authority> authorities;
-
     @Enumerated(EnumType.STRING)
     Role role;
 
+    @OneToMany(mappedBy="owner")
+    List<Pet> pets = new ArrayList<>();
+
+    @OneToMany(mappedBy="owner")
+    List<PetTerm> terms = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Rating> ratings = new ArrayList<>();
+
+    //@OneToMany(mappedBy = "user")
+    //private List<Authority> authorities;
 }

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -32,6 +33,13 @@ public class Pet {
     @ManyToOne
     @JoinColumn(name = "vet_id")
     private Vet vet;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
+
+    @OneToMany(mappedBy="pet")
+    List<PetTerm> terms = new ArrayList<>();
 
     @Transient
     List<File> images;
