@@ -4,6 +4,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+**/src/main/**/resources/static/photos/
+**/src/main/**/java/finki/das/puppycare/test/
+
 ### STS ###
 .apt_generated
 .classpath
