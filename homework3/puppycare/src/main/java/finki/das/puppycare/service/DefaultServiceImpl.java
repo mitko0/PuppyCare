@@ -1,15 +1,14 @@
 package finki.das.puppycare.service;
 
 import finki.das.puppycare.Constants;
-import finki.das.puppycare.model.Pet;
-import finki.das.puppycare.model.PetReport;
-import finki.das.puppycare.model.PetType;
-import finki.das.puppycare.model.Vet;
+import finki.das.puppycare.model.*;
 import finki.das.puppycare.repository.PetRepo;
 import finki.das.puppycare.repository.ReportRepo;
+import finki.das.puppycare.repository.UserRepo;
 import finki.das.puppycare.repository.VetRepo;
 import finki.das.puppycare.service.interfaces.DefaultService;
 import org.joda.time.DateTimeZone;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import org.joda.time.DateTime;
@@ -30,13 +29,15 @@ public class DefaultServiceImpl implements DefaultService {
     private final ReportRepo reportRepo;
     private final VetRepo vetRepo;
     private final PetRepo petRepo;
+    private final UserRepo userRepo;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-
-
-    public DefaultServiceImpl(ReportRepo reportRepo, VetRepo vetRepo, PetRepo petRepo) {
+    public DefaultServiceImpl(ReportRepo reportRepo, VetRepo vetRepo, PetRepo petRepo, UserRepo userRepo, BCryptPasswordEncoder passwordEncoder) {
         this.reportRepo = reportRepo;
         this.vetRepo = vetRepo;
         this.petRepo = petRepo;
+        this.userRepo = userRepo;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -99,6 +100,14 @@ public class DefaultServiceImpl implements DefaultService {
         vet.setId(vetId);
 
         return reportRepo.findByVet(vet);
+    }
+
+    @Override
+    public User saveUser(User user) {
+        String password = user.getPassword();
+        user.setPassword(passwordEncoder.encode(password));
+
+        return userRepo.save(user);
     }
 
     private void saveFile(MultipartFile file, String location) throws IOException {

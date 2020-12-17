@@ -40,8 +40,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/h2/**").permitAll()
                 .anyRequest().authenticated()
                 .and().formLogin()
-                .and().csrf().disable();
+                .loginPage("/sec/najava")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/", true).permitAll();
 
+        http.cors().and().csrf().disable();
         http.headers().frameOptions().disable();
     }
 }

@@ -1,9 +1,6 @@
 package finki.das.puppycare.service.interfaces;
 
-import finki.das.puppycare.model.Pet;
-import finki.das.puppycare.model.PetReport;
-import finki.das.puppycare.model.PetType;
-import finki.das.puppycare.model.Vet;
+import finki.das.puppycare.model.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -20,4 +17,6 @@ public interface DefaultService {
     Pet savePet(String name, PetType type, Long vetId, List<MultipartFile> images);
 
     List<PetReport> viewReports(Long vetId);
+
+    User saveUser(User user);
 }

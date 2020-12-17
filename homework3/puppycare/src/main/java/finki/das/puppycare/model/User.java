@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor
@@ -13,9 +14,11 @@ import javax.persistence.*;
 @Entity
 public class User {
 
+    @Size(min = 3, message = "Корисничкото име не смее да е пократко од 3 знака!")
     @Id
     private String username;
 
+    @Size(min = 5, message = "Лозинката не смее да е пократка од 5 знака!")
     private String password;
 
     //@OneToMany(mappedBy = "user")
