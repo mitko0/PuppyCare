@@ -1,16 +1,23 @@
 package finki.das.puppycare.web;
 
-import finki.das.puppycare.model.Role;
 import finki.das.puppycare.model.User;
+import finki.das.puppycare.model.Vet;
+import finki.das.puppycare.model.enums.Role;
 import finki.das.puppycare.service.interfaces.DefaultService;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
+import java.util.Collection;
+import java.util.List;
 
 @RequestMapping("/sec")
-@Controller
+@RestController
 public class SecurityController {
 
     private final DefaultService defaultService;
@@ -20,22 +27,48 @@ public class SecurityController {
     }
 
     @GetMapping("/najava")
-    public String login() {
-        return "test/login";
+    public ModelAndView login() {
+        ModelAndView modelAndView = new ModelAndView("najava");
+
+        if (isLoggedIn()) {
+            modelAndView.setViewName("redirect:/");
+        }
+
+        return modelAndView;
     }
 
     @PostMapping("/registracija")
-    public String register(@Valid @ModelAttribute User user) {
+    public RedirectView register(@Valid @ModelAttribute User user) {
 
         defaultService.saveUser(user);
 
-        return "redirect:/sec/najava";
+        return new RedirectView("/sec/najava");
     }
 
-    @GetMapping("/registracija")
-    public String register(Model model) {
-        model.addAttribute("roles", Role.values());
+    @PostMapping("/vraboti")
+    public RedirectView employ(@RequestParam List<String> users,
+                               @RequestParam Long vet) {
 
-        return "test/main";
+        defaultService.employ(users, vet);
+
+        return new RedirectView("/sec/admin");
+    }
+
+    @GetMapping("/admin")
+    public ModelAndView admin() {
+        ModelAndView modelAndView = new ModelAndView("admin");
+
+        List<Vet> vets = defaultService.allVets();
+        List<User> users = defaultService.allUsers();
+
+        modelAndView.getModel().put("users", users);
+        modelAndView.getModel().put("vets", vets);
+
+        return modelAndView;
+    }
+
+    public static boolean isLoggedIn() {
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return null != authentication && !("anonymousUser").equals(authentication.getName());
     }
 }

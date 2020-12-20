@@ -1,16 +1,17 @@
 package finki.das.puppycare.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import finki.das.puppycare.Constants;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import finki.das.puppycare.model.enums.PetType;
+import lombok.*;
 
 import javax.persistence.*;
-import java.io.File;
+import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "pets")
@@ -21,6 +22,7 @@ public class Pet {
     @Id
     private Long id;
 
+    @NotEmpty
     @Column(unique = true)
     private String name;
 
@@ -30,19 +32,22 @@ public class Pet {
     @Column(name = "images_location")
     private String imagesLocation;
 
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vet_id")
     private Vet vet;
 
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
     private User owner;
 
-    @OneToMany(mappedBy="pet")
+    @JsonIgnore
+    @OneToMany(mappedBy="pet", fetch = FetchType.LAZY)
     List<PetTerm> terms = new ArrayList<>();
 
     @Transient
-    List<File> images;
+    String[] images;
 
     @PostLoad
     public void loadImages() {

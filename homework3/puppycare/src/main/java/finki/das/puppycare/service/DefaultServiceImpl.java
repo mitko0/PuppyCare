@@ -2,10 +2,15 @@ package finki.das.puppycare.service;
 
 import finki.das.puppycare.Constants;
 import finki.das.puppycare.model.*;
+import finki.das.puppycare.model.enums.PetType;
+import finki.das.puppycare.model.enums.Role;
+import finki.das.puppycare.model.key.PetTermKey;
+import finki.das.puppycare.model.projection.RatingView;
 import finki.das.puppycare.repository.*;
 import finki.das.puppycare.service.interfaces.DefaultService;
 import org.joda.time.DateTimeZone;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -44,10 +49,11 @@ public class DefaultServiceImpl implements DefaultService {
     }
 
     @Override
-    public PetReport processReport(String message, double lat, double lon, boolean customerServes, PetType type, Long vetId) {
+    public PetReport processReport(String title, String message, double lat, double lon, boolean customerServes, PetType type, Long vetId) {
         DateTime now = new DateTime(DateTimeZone.UTC);
 
         PetReport petReport = new PetReport();
+        petReport.setTitle(title);
         petReport.setMessage(message);
         petReport.setDate(now.toDate());
         petReport.setLat(lat);
@@ -67,6 +73,13 @@ public class DefaultServiceImpl implements DefaultService {
     }
 
     @Override
+    public PetReport updateReport(Long id, boolean done) {
+        PetReport report = reportRepo.findById(id).orElseThrow(() -> new RuntimeException("Invalid id"));
+        report.setDone(done);
+        return reportRepo.save(report);
+    }
+
+    @Override
     public List<Vet> nearVets(double lat, double lon, int count) {
         return vetRepo.nearestVets(lat, lon, count);
     }
@@ -77,14 +90,17 @@ public class DefaultServiceImpl implements DefaultService {
     }
 
     @Override
-    public List<Pet> allPets() {
-        return petRepo.findAll();
+    public Pet getPet(Long id) {
+        return petRepo.findById(id).orElseThrow(() -> new RuntimeException("Invalid id"));
     }
 
     @Override
-    public Pet savePet(String name, PetType type, Long vetId, List<MultipartFile> images) {
-        Vet vet = vetRepo.findById(vetId).orElseThrow(() -> new RuntimeException("Invalid vet id"));
+    public List<Pet> allPets() {
+        return petRepo.findAll(Sort.by(Sort.Order.by("vet.id")));
+    }
 
+    @Override
+    public Pet savePet(String name, PetType type, Vet vet, List<MultipartFile> images) {
         Pet pet = new Pet();
         pet.setVet(vet);
         pet.setName(name);
@@ -117,11 +133,31 @@ public class DefaultServiceImpl implements DefaultService {
     }
 
     @Override
+    public PetReport viewReport(Long reportId) {
+        return reportRepo.findById(reportId).orElseThrow(() -> new RuntimeException("Invalid id"));
+    }
+
+    @Override
+    public User getUser(String username) {
+        return userRepo.findById(username).get();
+    }
+
+    @Override
     public User saveUser(User user) {
         String password = user.getPassword();
         user.setPassword(passwordEncoder.encode(password));
+        user.setRole(Role.ROLE_USER);
+
+        if (userRepo.count() == 0) {
+            user.setRole(Role.ROLE_ADMIN);
+        }
 
         return userRepo.save(user);
+    }
+
+    @Override
+    public List<User> allUsers() {
+        return userRepo.findAll();
     }
 
     @Override
@@ -130,13 +166,58 @@ public class DefaultServiceImpl implements DefaultService {
     }
 
     @Override
-    public List<Rating> rating(Pageable pageable) {
-        return ratingRepo.findOrderedByValue(pageable);
+    public List<Rating> ratingsForReport(Long reportId) {
+        return ratingRepo.findRatingById_ReportId(reportId);
+    }
+
+    @Override
+    public List<Rating> bestVets(Pageable pageable) {
+        return ratingRepo.findAverageRating(pageable);
     }
 
     @Override
     public PetTerm createTerm(PetTerm term) {
+        DateTime dateTime = new DateTime(term.getDate(), DateTimeZone.UTC);
+        term.setDate(dateTime.toDate());
+
         return petTermRepo.save(term);
+    }
+
+    @Override
+    public PetTerm updateTerm(PetTermKey key, boolean accept) {
+        PetTerm term = petTermRepo.findById(key).orElseThrow();
+        term.setSeen(true);
+
+        if (accept) {
+            User owner = userRepo.findById(key.getOwnerId()).orElseThrow();
+            term.getPet().setOwner(owner);
+        }
+
+        return petTermRepo.save(term);
+    }
+
+    @Override
+    public List<PetTerm> getTermsForVet(Long vetId) {
+        return petTermRepo.findPetTermsForVet(vetId);
+    }
+
+    @Override
+    public List<RatingView> asd() {
+        return ratingRepo.findAverageRating();
+    }
+
+    @Override
+    public void employ(List<String> usernames, Long vetId) {
+        List<User> users = userRepo.findAllById(usernames);
+        users.forEach(user -> {
+            Vet vet = new Vet();
+            vet.setId(vetId);
+
+            user.setVet(vet);
+            user.setRole(Role.ROLE_WORKER);
+        });
+
+        userRepo.saveAll(users);
     }
 
     private void saveFile(MultipartFile file, String location) throws IOException {

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Администрација</title>
+
+    <th:block th:include="fragments/general.html :: headerfiles"/>
+
+    <script th:src="@{/res/js/admin.js}"></script>
+
+    <style>
+        .rem {
+            cursor: no-drop;
+        }
+
+        .ui-autocomplete {
+            overflow-y: auto;
+            overflow-x: hidden;
+            max-height: 300px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div th:replace="fragments/general.html :: nav"></div>
+
+    <form method="post" action="/sec/vraboti">
+        <h1 class="bg-light-transparent mt-2 mb-2 p-1">Додади вработени во ветеринарна:</h1>
+        <div class="row">
+            <div class="col-12 col-md-6 mt-2">
+                <input id="searchVet"
+                       class="form-control"
+                       type="search"
+                       placeholder="Ветеринарна"
+                       aria-label="Search">
+                <div id="selectedVets" class="bg-light-transparent p-2 mt-2"></div>
+            </div>
+
+            <div class="col-12 col-md-6 mt-2">
+                <input id="searchUser"
+                       class="form-control"
+                       type="search"
+                       placeholder="Корисничко име"
+                       aria-label="Search">
+                <div id="selectedUsers" class="bg-light-transparent p-2 mt-2 mb-2"></div>
+
+                <button class="btn btn-primary btn-block" type="submit">Сочувај</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    let users = /*[[${users}]]*/ [];
+    let vets = /*[[${vets}]]*/ [];
+    /*]]>*/
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="headerfiles">
+    <link th:href="@{/res/bootstrap/css/bootstrap.css}" rel="stylesheet">
+    <link th:href="@{/res/jquery-ui/jquery-ui.css}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link th:href="@{/res/css/default.css}" rel="stylesheet">
+
+    <script th:src="@{/res/jquery/jquery-3.5.1.min.js}"></script>
+    <script th:src="@{/res/jquery-ui/jquery-ui.js}"></script>
+    <script th:src="@{/res/popper/popper.js}"></script>
+    <script th:src="@{/res/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</head>
+<body>
+
+<nav id="nav" th:fragment="nav" class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">PuppyCare</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item" th:if="${#strings.contains(#authentication.authorities,'ADMIN')}">
+                <a class="nav-link" href="/sec/admin">Администрација</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/">Почетна</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/milenici">Миленици</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/vet">Ветеринарни</a>
+            </li>
+
+            <li class="nav-item dropdown" th:if="${#strings.contains(#authentication.authorities,'WORKER')}">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Ветеринарна
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/vet/doma">Дома</a>
+                    <a class="dropdown-item" href="/vet/termini">Термини</a>
+                </div>
+            </li>
+
+            <li class="nav-item" sec:authorize="isAnonymous()">
+                <a class="nav-link" href="/sec/najava">Најава</a>
+            </li>
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+                <a class="nav-link" href="/logout">Одјава</a>
+            </li>
+
+        </ul>
+    </div>
+</nav>
+
+</body>
+</html>

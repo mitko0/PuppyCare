@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ветеринарна</title>
+
+    <th:block th:include="fragments/general.html :: headerfiles"/>
+
+    <link rel="stylesheet" th:href="@{/res/datatables/datatables.css}">
+    <script th:src="@{/res/datatables/datatables.js}"></script>
+    <script th:src="@{/res/js/termini.js}"></script>
+</head>
+<body>
+<div class="container">
+    <div th:replace="fragments/general.html :: nav"></div>
+
+    <div class="bg-light-transparent mt-2 p-2">
+        <table class="table table-striped" id="terms" style="min-width: 500px; width: 100%">
+            <thead>
+            <tr>
+                <th>Барател</th>
+                <th>Миленик</th>
+                <th>Датум</th>
+                <th>&nbsp;</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="term: ${terms}">
+                <td th:text="${term.id.ownerId}"></td>
+                <td th:text="${term.pet.name}"></td>
+                <td th:text="${#dates.format(term.date, 'dd-MM-yyyy')}"></td>
+                <td class="text-center">
+                    <button class="submit bnt btn-outline-primary"
+                            title="Одбиј го барањето за присвојување"
+                            th:user="${term.id.ownerId}"
+                            th:pet="${term.id.petId}"
+                            th:accept="true">
+                        <i class="fa fa-check-circle"></i>
+                    </button>
+
+                    <button class="submit bnt btn-outline-danger"
+                            title="Прифати го барањето за присвојување"
+                            th:user="${term.id.ownerId}"
+                            th:pet="${term.id.petId}"
+                            th:accept="false">
+                        <i class="fa fa-minus-circle"></i>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

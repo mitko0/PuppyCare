@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Миленици</title>
+
+    <th:block th:include="fragments/general.html :: headerfiles"/>
+</head>
+<body>
+<div class="container">
+    <div th:replace="fragments/general.html :: nav"></div>
+
+    <div class="row mt-2">
+        <div th:each="pet: ${pets}"
+             class="col-12 col-sm-6 col-md-4 d-flex flex-column align-items-center justify-content-center">
+            <div th:text="${pet.name}"></div>
+            <a th:href="${'/milenici/' + pet.id}">
+                <img th:if="${#lists.size(pet.images) != 0}"
+                     th:alt="${pet.name}"
+                     th:src="${pet.images[0]}"
+                     class="img-fluid align-text-bottom">
+
+                <img th:unless="${#lists.size(pet.images) != 0}"
+                     th:alt="${pet.name}"
+                     th:src="@{res/images/petProfilePic.png}"
+                     class="img-fluid align-middle">
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

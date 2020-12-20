@@ -1,14 +1,13 @@
 package finki.das.puppycare.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import finki.das.puppycare.model.key.RatingKey;
+import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import java.math.BigDecimal;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "ratings")
@@ -23,11 +22,13 @@ public class Rating {
 
     private String message;
 
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("user_id")
     @JoinColumn(name = "user_id")
     private User user;
 
+    @JsonIgnore
     @ManyToOne
     @MapsId("report_id")
     @JoinColumn(name = "report_id")

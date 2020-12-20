@@ -1,7 +1,7 @@
 package finki.das.puppycare.repository;
 
 import finki.das.puppycare.model.Authority;
-import finki.das.puppycare.model.AuthorityKey;
+import finki.das.puppycare.model.key.AuthorityKey;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 

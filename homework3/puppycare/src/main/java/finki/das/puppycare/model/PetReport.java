@@ -1,8 +1,8 @@
 package finki.das.puppycare.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import finki.das.puppycare.model.enums.PetType;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "pet_reports")
@@ -44,10 +45,12 @@ public class PetReport {
     @Column(name = "type_")
     private PetType type;
 
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vet_id")
     private Vet vet;
 
-    @OneToMany(mappedBy = "report")
+    @JsonIgnore
+    @OneToMany(mappedBy = "report", fetch = FetchType.LAZY)
     private List<Rating> ratings = new ArrayList<>();
 }

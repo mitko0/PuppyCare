@@ -1,13 +1,13 @@
 package finki.das.puppycare.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "vets")
@@ -22,9 +22,15 @@ public class Vet {
     @Column(name = "lon")
     private double longitude;
 
-    @OneToMany(mappedBy="vet")
+    @JsonIgnore
+    @OneToMany(mappedBy="vet", fetch = FetchType.LAZY)
+    List<User> employees;
+
+    @JsonIgnore
+    @OneToMany(mappedBy="vet", fetch = FetchType.LAZY)
     List<PetReport> reports;
 
-    @OneToMany(mappedBy="vet")
+    @JsonIgnore
+    @OneToMany(mappedBy="vet", fetch = FetchType.LAZY)
     List<Pet> pets;
 }

@@ -1,0 +1,60 @@
+body {
+    background-image: url("../images/vet.jpg");
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.bal * {
+    border: 1px solid red;
+}
+
+
+.bg-light-transparent {
+    background-color: rgba(248, 249, 250, 0.4);
+}
+
+#nav ul::after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+
+#nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#nav li {
+    display: inline-block;
+    position: relative;
+}
+
+#nav ul li a {
+    color: darkblue;
+    text-decoration: none;
+}
+
+#nav a:hover {
+    color: deepskyblue;
+}
+
+#nav a::before {
+    content: '';
+    display: block;
+    height: 5px;
+    background-color: darkslateblue;
+    position: absolute;
+    top: 0;
+    width: 0;
+    transition: all ease-in-out 500ms;
+}
+
+#nav a:hover::before {
+    width: 95%;
+}

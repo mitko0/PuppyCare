@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ветеринарна</title>
+
+    <th:block th:include="fragments/general.html :: headerfiles"/>
+
+    <link rel="stylesheet" th:href="@{/res/datatables/datatables.css}">
+    <script th:src="@{/res/datatables/datatables.js}"></script>
+    <script th:src="@{/res/js/vet.js}"></script>
+
+</head>
+<body>
+<div class="container">
+    <div id="response"></div>
+
+    <div th:replace="fragments/general.html :: nav"></div>
+
+    <div class="mt-2">
+        <button class="btn btn-primary" data-toggle="modal" data-target="#newPetModal">
+            Ново милениче
+        </button>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="bg-light-transparent mt-2 p-2">
+        <h1>Барања:</h1>
+        <table class="table table-striped" id="reports">
+            <thead>
+            <tr>
+                <th>Наслов</th>
+                <th>Датум</th>
+                <th>Локација</th>
+                <th>Клиентот служи</th>
+                <th>Тип</th>
+                <th>Завршено</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="report: ${reports}">
+                <td th:text="${report.title}"></td>
+                <td th:text="${report.date}"></td>
+                <td>
+                    <b th:text="${report.lat}"></b><br>
+                    <b th:text="${report.lon}"></b>
+                </td>
+                <td>
+                    <div class="form-check text-center">
+                        <input class="form-check-input" type="checkbox" disabled th:checked="${report.customerServes}">
+                    </div>
+                </td>
+                <td th:text="${report.type}"></td>
+                <td colspan="2">
+                    <form method="post" action="/prijava/azur">
+                        <input type="hidden" name="id" th:value="${report.id}">
+
+                        <div class="form-row">
+                            <div class="col-8 form-check text-center">
+                                <input type="checkbox"
+                                       name="done"
+                                       class="form-check-input"
+                                       th:checked="${report.done}">
+                            </div>
+                            <div class="col-4">
+                                <button class="btn btn-outline-primary ml-auto">
+                                    <i class="fa fa-save"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="newPetModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ново милениче</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="/milenici/novo" id="createPetForm" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="name">Име</label>
+                        <input type="text" class="form-control" id="name" name="name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="type">Тип</label>
+                        <select class="custom-select" id="type" name="type">
+                            <option th:each="type: ${types}"
+                                    th:text="${type.value}"
+                                    th:value="${type.name()}"></option>
+                        </select>
+                    </div>
+
+                    <div class="custom-file">
+                        <label for="images">Селектирај слики</label>
+                        <input type="file" class="form-control-file" id="images" name="images" multiple>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal">Затвори</button>
+                <button class="btn btn-primary" id="createPet">Креирај</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
