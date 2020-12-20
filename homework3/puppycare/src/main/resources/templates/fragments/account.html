@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<form th:fragment="loginForm" name="f" method="post" th:action="@{/login}">
+    <div th:if="${param.error}" class="alert alert-danger">
+        Невалидни корисничко име или лозинка
+    </div>
+    <p>
+        <label for="username" class="sr-only">Корисничко име</label>
+        <input type="text" id="username" name="username" class="form-control"
+               placeholder="Корисничко име" required autofocus>
+    </p>
+    <p>
+        <label for="password" class="sr-only">Лозинка</label>
+        <input type="password" id="password" name="password" class="form-control"
+               placeholder="Лозинка"
+               required>
+    </p>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Најава</button>
+</form>
+
+<form th:fragment="registerForm" name="f" method="post" th:action="@{/sec/registracija}">
+    <p>
+        <label for="registerUsername" class="sr-only">Корисничко име</label>
+        <input type="text" id="registerUsername" name="username" class="form-control"
+               placeholder="Корисничко име" required autofocus>
+    </p>
+    <p>
+        <label for="email" class="sr-only">Е-маил</label>
+        <input type="email" id="email" name="email" class="form-control"
+               placeholder="Е-маил">
+    </p>
+    <p>
+        <label for="registerPassword" class="sr-only">Лозинка</label>
+        <input type="password" id="registerPassword" name="password" class="form-control"
+               placeholder="Лозинка"
+               required>
+    </p>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Регистрација</button>
+</form>
+
+</body>
+</html>

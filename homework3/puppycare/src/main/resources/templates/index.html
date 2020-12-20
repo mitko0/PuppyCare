@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>PuppyCare</title>
+
+    <th:block th:include="fragments/general.html :: headerfiles"/>
+
+    <link th:href="@{/res/css/index.css}" rel="stylesheet">
+    <script th:src="@{/res/js/index.js}"></script>
+</head>
+<body>
+<div class="container">
+    <div id="response"></div>
+
+    <div th:replace="fragments/general.html :: nav"></div>
+
+    <div class="row mt-2">
+        <div class="col-12 col-md-6 offset-md-6">
+            <h1 id="welcome">Здраво! PuppyCare претставува веб страница чија цел е да помогне во решавање на проблемот
+                кој го има
+                во Скопје со кучињата скитници оставени без храна, вода и засолниште. Вие ќе можете брзо и лесно да
+                пријавите напуштено и беспомошно куче со еден клик на копчето подолу, кое ќе овозможи најблиската
+                ветеринарна станица во најбрз можен рок да го згрижи кучето и да му ја пружи потребната нега, како
+                и да го спреми за вдомување.</h1>
+
+            <button type="button"
+                    data-toggle="modal"
+                    data-target="#reportModal"
+                    class="btn btn-primary btn-block btn-large">
+                ПРИЈАВИ МИЛЕНИК
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModal" aria-hidden="true">
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Пријави миленик</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post" action="/prijava" id="reportForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="title">Наслов</label>
+                        <input type="text" class="form-control" id="title" aria-describedby="title" name="title">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Порака</label>
+                        <textarea class="form-control" id="message" aria-describedby="message" name="message"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="type">Тип на милениче</label>
+                        <select class="custom-select" name="type" id="type">
+                            <option th:each="type: ${types}"
+                                    th:text="${type.value}"
+                                    th:value="${type.name()}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" id="customerServes" name="customerServes">
+                        <label class="form-check-label" for="customerServes">Јас ќе го донесам миленичето</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Затвори</button>
+                    <input id="reportSubmit" type="submit" class="btn btn-primary" value="Пријави">
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="social-menu">
+        <ul>
+            <li><a href="https://www.facebook.com/"><i class="fa fa-facebook"></i></a></li>
+            <li><a href="https://twitter.com/?lang=en"><i class="fa fa-twitter"></i></a></li>
+            <li><a href="https://www.instagram.com/"><i class="fa fa-instagram"></i></a></li>
+            <li><a href="https://www.linkedin.com/"><i class="fa fa-linkedin"></i></a></li>
+        </ul>
+    </div>
+</footer>
+
+</body>
+</html>

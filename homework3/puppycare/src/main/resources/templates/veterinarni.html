@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ветеринарни</title>
+
+    <th:block th:include="fragments/general.html :: headerfiles"/>
+
+    <link th:href="@{/res/leaflet/leaflet.css}" rel="stylesheet">
+    <script th:src="@{/res/leaflet/leaflet.js}"></script>
+    <script th:src="@{/res/js/veterinarni.js}"></script>
+
+    <style>
+        #vetClose:hover {
+            cursor: pointer;
+        }
+
+        #vetClose {
+            background: white;
+            padding: 3px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container position-fixed fixed-top">
+    <div th:replace="fragments/general.html :: nav"></div>
+</div>
+
+<div class="container pt-5">
+    <div id="map"
+         class="mt-5"
+         style="height: 85vh">
+        <i class="fa fa-bible"></i>
+    </div>
+</div>
+
+<div class="modal fade show" id="modalReports" tabindex="-1" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalScrollableTitle">Барања</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                 <table class="table table-bordered">
+                     <thead>
+                     <tr>
+                         <th>Наслов</th>
+                         <th>Ден на пријавување</th>
+                         <th>Завршено</th>
+                         <th>&nbsp;</th>
+                     </tr>
+                     </thead>
+                     <tbody id="vetData"></tbody>
+                 </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Затвори</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    let vets = /*[[${vets}]]*/ [];
+    let asd = /*[[${asd}]]*/ [];
+    let displayVets = vets;
+    /*]]>*/
+    console.log(asd);
+
+</script>
+
+</body>
+</html>
