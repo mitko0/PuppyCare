@@ -1,5 +1,8 @@
 package finki.das.puppycare.model.enums;
 
+/**
+ * Enum for pet types
+ */
 public enum PetType {
     Other("Друго"),
     Dog("Куче"),

@@ -15,8 +15,7 @@ public interface RatingRepo extends JpaRepository<Rating, RatingKey> {
     @Query("select r, avg(r.value) as average from Rating r group by r.report.vet.id order by average")
     List<Rating> findAverageRating(Pageable pageable);
 
-    // ne valja
-//    @Query("select r.id, avg(r.value) as average from Rating r group by r.report.vet.id order by average")
+    // @Query("select r.id, avg(r.value) as average from Rating r group by r.report.vet.id order by average")
     @Query("select r.report.vet.id, avg(r.value) as average from Rating r group by r.report.vet.id order by average")
     List<RatingView> findAverageRating();
 

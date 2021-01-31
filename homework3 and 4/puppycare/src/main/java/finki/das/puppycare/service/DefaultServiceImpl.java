@@ -202,11 +202,6 @@ public class DefaultServiceImpl implements DefaultService {
     }
 
     @Override
-    public List<RatingView> asd() {
-        return ratingRepo.findAverageRating();
-    }
-
-    @Override
     public void employ(List<String> usernames, Long vetId) {
         List<User> users = userRepo.findAllById(usernames);
         users.forEach(user -> {
